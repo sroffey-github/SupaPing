@@ -1,0 +1,50 @@
+/* src/app/globals.css */
+@import 'tailwindcss';
+
+@layer base {
+  :root {
+    /* Color Palette derived from image_0.png */
+    --color-base: #f8fafc;        /* Main Sidebar Background (very light zinc) */
+    --color-text-dim: #6b7280;    /* Inactive text/icon color (zinc-500) */
+    --color-text-dark: #374151;   /* Active text/logo color (zinc-700) */
+    --color-search: #e5e7eb;      /* Search Bar Background (zinc-200) */
+    --color-search-dim: #9ca3af;  /* Search placeholder/microphone color (zinc-400) */
+    
+    /* Radius & Font derived from image_0.png */
+    --radius-active: 0.5rem;      /* Rounded-md for the active state */
+    --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    background-color: var(--color-base);
+    color: var(--color-text-dim);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+@layer utilities {
+  /* Utility classes matching the specific colors and active state */
+  .text-base-dim {
+    color: var(--color-text-dim);
+  }
+  .text-base-dark {
+    color: var(--color-text-dark);
+  }
+  .bg-base {
+    background-color: var(--color-base);
+  }
+  .bg-search {
+    background-color: var(--color-search);
+  }
+
+  /* Specific style for the active nav link to match the image's look */
+  .active-link {
+    background-color: #ffffff;
+    border-radius: var(--radius-active);
+    color: var(--color-text-dark);
+    /* Subtle shadow to match the look of the active item in image_0.png */
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); 
+  }
+}
