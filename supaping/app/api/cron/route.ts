@@ -7,13 +7,15 @@ function needsPing(lastPingAt: string | null, frequency: string): boolean {
 
   const lastPingDate = new Date(lastPingAt);
   const now = new Date();
-  const diffInDays = (now.getTime() - lastPingDate.getTime()) / (1000 * 3600 * 24);
+  
+  // Calculate difference in hours instead of strict days to account for execution time
+  const diffInHours = (now.getTime() - lastPingDate.getTime()) / (1000 * 3600);
 
   switch (frequency) {
-    case '3_days': return diffInDays >= 3;
-    case '5_days': return diffInDays >= 5;
+    case '3_days': return diffInHours >= (3 * 24) - 1; // 71 hours
+    case '5_days': return diffInHours >= (5 * 24) - 1; // 119 hours
     case 'daily':
-    default: return diffInDays >= 1;
+    default: return diffInHours >= 23; // 23 hours
   }
 }
 
@@ -51,7 +53,7 @@ export async function GET(request: Request) {
         const cleanKey = project.anon_key.trim();
         
         // 2. Point to the Auth settings endpoint
-        const pingUrl = `${cleanUrl}/auth/v1/settings`;
+        const pingUrl = `${cleanUrl}/rest/v1/`;
         
         const response = await fetch(pingUrl, {
           method: 'GET',
