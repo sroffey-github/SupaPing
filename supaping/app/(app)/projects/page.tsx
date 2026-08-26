@@ -16,6 +16,7 @@ export default async function ProjectsPage() {
         <AddProjectModal />
       </header>
 
+      {/* The empty state vs grid check happens BELOW the banner */}
       {projects.length === 0 ? (
         <div className="flex flex-col items-center justify-center bg-white border border-dashed border-zinc-300 rounded-xl py-16 text-center">
           <p className="text-base-dark font-medium mb-1">No projects found</p>

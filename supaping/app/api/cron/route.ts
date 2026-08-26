@@ -3,12 +3,11 @@ import { createAdminClient } from '@/utils/supabase/admin';
 
 // Helper function to check if a project needs a ping based on frequency
 function needsPing(lastPingAt: string | null, frequency: string): boolean {
-  if (!lastPingAt) return true; // Never pinged before
+  if (!lastPingAt) return true;
 
   const lastPingDate = new Date(lastPingAt);
   const now = new Date();
   
-  // Calculate difference in hours instead of strict days to account for execution time
   const diffInHours = (now.getTime() - lastPingDate.getTime()) / (1000 * 3600);
 
   switch (frequency) {
@@ -20,7 +19,7 @@ function needsPing(lastPingAt: string | null, frequency: string): boolean {
 }
 
 export async function GET(request: Request) {
-  // 1. Secure the route: Only allow requests with the correct secret
+  // Secure the route
   const authHeader = request.headers.get('authorization');
   if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -28,7 +27,7 @@ export async function GET(request: Request) {
 
   const supabase = createAdminClient();
 
-  // 2. Fetch all projects and all user settings
+  // Fetch all projects and all user settings
   const { data: projects, error: projectsError } = await supabase.from('projects').select('*');
   const { data: settings, error: settingsError } = await supabase.from('user_settings').select('*');
 
@@ -42,30 +41,35 @@ export async function GET(request: Request) {
   let pingCount = 0;
   const errors: string[] = [];
 
-  // 3. Loop through all projects and ping them if necessary
+  // Loop through all projects and ping them if necessary
   for (const project of projects || []) {
-    const frequency = settingsMap.get(project.user_id) || 'daily'; // Default to daily if no settings found
+    const frequency = settingsMap.get(project.user_id) || 'daily';
 
     if (needsPing(project.last_ping_at, frequency)) {
       try {
-        // 1. Clean the URL and Key just like we did in the manual action
         const cleanUrl = project.url.trim().replace(/\/$/, '');
         const cleanKey = project.anon_key.trim();
         
-        // 2. Point to the Auth settings endpoint
-        const pingUrl = `${cleanUrl}/rest/v1/`;
+        // Generate a random string to force a database write
+        const randomString = crypto.randomUUID();
+        
+        // Target the keep_alive table, specifically row where id = 1
+        const pingUrl = `${cleanUrl}/rest/v1/keep_alive?id=eq.1`;
         
         const response = await fetch(pingUrl, {
-          method: 'GET',
+          method: 'PATCH',
           headers: {
             'apikey': cleanKey,
-            'Authorization': `Bearer ${cleanKey}`
+            'Authorization': `Bearer ${cleanKey}`,
+            'Content-Type': 'application/json',
+            'Prefer': 'return=minimal' // Optimizes bandwidth by not returning the updated row
           },
+          body: JSON.stringify({ ping: randomString }),
           cache: 'no-store',
         });
 
         if (response.ok) {
-          // Update the last_ping_at timestamp in our database
+          // Update the last_ping_at timestamp in SupaPing's database
           await supabase
             .from('projects')
             .update({ last_ping_at: new Date().toISOString() })
