@@ -1,9 +1,11 @@
-import { NextResponse, type NextRequest } from 'next/server'
 import { createServerClient } from '@supabase/ssr'
+import { NextResponse, type NextRequest } from 'next/server'
 
 export async function middleware(request: NextRequest) {
   let supabaseResponse = NextResponse.next({
-    request,
+    request: {
+      headers: request.headers,
+    },
   })
 
   const supabase = createServerClient(
@@ -27,26 +29,25 @@ export async function middleware(request: NextRequest) {
     }
   )
 
-  // Fetch the user to trigger a token refresh if necessary
   const { data: { user } } = await supabase.auth.getUser()
+  const isLoginPage = request.nextUrl.pathname.startsWith('/login')
+  const isAuthCallback = request.nextUrl.pathname.startsWith('/auth/callback')
+  const isApiRoute = request.nextUrl.pathname.startsWith('/api')
 
-  const pathname = request.nextUrl.pathname
+  // Allow auth callbacks and APIs to pass through without redirecting
+  if (isAuthCallback || isApiRoute) {
+    return supabaseResponse
+  }
 
-  // Define route categories
-  const isPublicLandingPage = pathname === '/'
-  const isProtectedRoute = pathname.startsWith('/dashboard') || 
-                           pathname.startsWith('/projects') || 
-                           pathname.startsWith('/settings')
-
-  // Rule 1: If logged in and trying to access the landing page, redirect to dashboard
-  if (user && isPublicLandingPage) {
+  // If no user and not on login page, redirect to login
+  if (!user && !isLoginPage) {
     const url = request.nextUrl.clone()
-    url.pathname = '/dashboard'
+    url.pathname = '/login'
     return NextResponse.redirect(url)
   }
 
-  // Rule 2: If NOT logged in and trying to access a protected route, redirect to login (landing page)
-  if (!user && isProtectedRoute) {
+  // If user exists and tries to access login, redirect to dashboard
+  if (user && isLoginPage) {
     const url = request.nextUrl.clone()
     url.pathname = '/'
     return NextResponse.redirect(url)
@@ -57,13 +58,6 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    /*
-     * Match all request paths except for the ones starting with:
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     * Feel free to modify this pattern to include more paths.
-     */
     '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
   ],
 }

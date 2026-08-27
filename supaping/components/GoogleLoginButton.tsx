@@ -1,35 +1,25 @@
-'use client'
+'use client';
 
-import { createClient } from '@/utils/supabase/client'
-import { useState } from 'react'
+import React from 'react';
+import { createClient } from '@/utils/supabase/client';
 
 export default function GoogleLoginButton() {
-  const [isLoading, setIsLoading] = useState(false)
-  const supabase = createClient()
+  const supabase = createClient();
 
-  async function handleLogin() {
-    setIsLoading(true)
-    
-    const origin = window.location.origin
-    
-    const { error } = await supabase.auth.signInWithOAuth({
+  const handleLogin = async () => {
+    await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: `${origin}/auth/callback?next=/projects`,
+        // This dynamically resolves to localhost:3000 locally, and your actual domain in prod
+        redirectTo: `${window.location.origin}/auth/callback`, 
       },
-    })
-
-    if (error) {
-      console.error('Login failed:', error.message)
-      setIsLoading(false)
-    }
-  }
+    });
+  };
 
   return (
-    <button
+    <button 
       onClick={handleLogin}
-      disabled={isLoading}
-      className="flex items-center justify-center gap-3 w-full px-4 py-2.5 border border-zinc-300 rounded-lg text-sm font-medium text-base-dark hover:bg-zinc-50 transition shadow-sm disabled:opacity-50"
+      className="w-full flex items-center justify-center gap-3 px-4 py-2 bg-white border border-zinc-200 rounded-lg text-sm font-medium text-base-dark hover:bg-zinc-50 transition shadow-sm"
     >
       <svg className="size-5" viewBox="0 0 24 24">
         <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4" />
@@ -38,7 +28,7 @@ export default function GoogleLoginButton() {
         <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335" />
         <path d="M1 1h22v22H1z" fill="none" />
       </svg>
-      {isLoading ? 'Connecting...' : 'Continue with Google'}
+      Continue with Google
     </button>
-  )
+  );
 }

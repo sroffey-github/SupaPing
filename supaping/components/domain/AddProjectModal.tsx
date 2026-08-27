@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { Plus, X, Terminal, Copy, Check } from 'lucide-react';
-import { addProject } from './actions';
+import { addProject } from '@/app/actions';
 import toast from 'react-hot-toast';
 
 export default function AddProjectModal() {
@@ -15,15 +15,23 @@ export default function AddProjectModal() {
   ping TEXT
 );
 
--- Insert the initial row that SupaPing will update
+-- 1. Grant base table permissions to the API
+GRANT SELECT, UPDATE ON keep_alive TO anon;
+
+-- 2. Insert the initial row
 INSERT INTO keep_alive (id, ping) 
 VALUES (1, 'initial_ping') 
 ON CONFLICT (id) DO NOTHING;
 
--- Secure the table
+-- 3. Enable Row Level Security
 ALTER TABLE keep_alive ENABLE ROW LEVEL SECURITY;
 
--- Allow SupaPing (via anon key) to update the row
+-- 4. Allow SupaPing (via anon key) to read the row
+CREATE POLICY "Allow anon select to keep_alive" 
+ON keep_alive FOR SELECT TO anon 
+USING (true);
+
+-- 5. Allow SupaPing (via anon key) to update the row
 CREATE POLICY "Allow anon update to keep_alive" 
 ON keep_alive FOR UPDATE TO anon 
 USING (true) WITH CHECK (true);`;

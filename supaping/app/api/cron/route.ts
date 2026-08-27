@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { createAdminClient } from '@/utils/supabase/admin';
+import { createClient as createRemoteClient } from '@supabase/supabase-js';
 
 // Helper function to check if a project needs a ping based on frequency
 function needsPing(lastPingAt: string | null, frequency: string): boolean {
@@ -50,34 +51,38 @@ export async function GET(request: Request) {
         const cleanUrl = project.url.trim().replace(/\/$/, '');
         const cleanKey = project.anon_key.trim();
         
+        // 2. Initialize a temporary Supabase client for the target project
+        const remoteSupabase = createRemoteClient(cleanUrl, cleanKey, {
+          auth: { persistSession: false } // Prevent it from storing a session
+        });
+        
         // Generate a random string to force a database write
         const randomString = crypto.randomUUID();
         
-        // Target the keep_alive table, specifically row where id = 1
-        const pingUrl = `${cleanUrl}/rest/v1/keep_alive?id=eq.1`;
-        
-        const response = await fetch(pingUrl, {
-          method: 'PATCH',
-          headers: {
-            'apikey': cleanKey,
-            'Authorization': `Bearer ${cleanKey}`,
-            'Content-Type': 'application/json',
-            'Prefer': 'return=minimal' // Optimizes bandwidth by not returning the updated row
-          },
-          body: JSON.stringify({ ping: randomString }),
-          cache: 'no-store',
-        });
+        // 3. Perform the update using the anon client and force it to return the row
+        const { data: updatedRow, error: pingError } = await remoteSupabase
+          .from('keep_alive')
+          .update({ ping: randomString })
+          .eq('id', 1)
+          .select();
 
-        if (response.ok) {
-          // Update the last_ping_at timestamp in SupaPing's database
-          await supabase
-            .from('projects')
-            .update({ last_ping_at: new Date().toISOString() })
-            .eq('id', project.id);
-            
-          pingCount++;
+        // 4. Catch silent failures (RLS blocked it, or row missing)
+        if (pingError || !updatedRow || updatedRow.length === 0) {
+          const errMsg = pingError ? pingError.message : 'Target project rejected update (RLS) or id=1 missing';
+          errors.push(`Project ${project.id} failed: ${errMsg}`);
+          continue; // Skip updating the timestamp locally and move to the next project
+        }
+
+        // 5. Update the last_ping_at timestamp in SupaPing's database
+        const { error: updateError } = await supabase
+          .from('projects')
+          .update({ last_ping_at: new Date().toISOString() })
+          .eq('id', project.id);
+          
+        if (updateError) {
+          errors.push(`Project ${project.id} pinged, but local timestamp update failed: ${updateError.message}`);
         } else {
-          errors.push(`Project ${project.id} returned status: ${response.status}`);
+          pingCount++;
         }
       } catch (err: any) {
         errors.push(`Failed to ping project ${project.id}: ${err.message}`);

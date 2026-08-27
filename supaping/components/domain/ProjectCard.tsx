@@ -1,11 +1,9 @@
 'use client';
 
-import React, { useState, useRef, useEffect } from 'react';
-// 1. Added the 'Zap' icon here
 import { Activity, Clock, MoreVertical, Edit2, Trash2, X, Zap } from 'lucide-react'; 
+import { updateProject, deleteProject, pingProject } from '@/app/actions'; 
+import React, { useState, useRef, useEffect } from 'react';
 import toast from 'react-hot-toast';
-// 2. Imported the new pingProject action
-import { updateProject, deleteProject, pingProject } from './actions'; 
 
 interface Project {
   id: string;
