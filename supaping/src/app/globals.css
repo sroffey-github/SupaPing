@@ -1,0 +1,132 @@
+@import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap");
+@import "tailwindcss";
+
+:root {
+  --background: #EEF2F6;
+  --foreground: #0F172A;
+  --primary: #00a86b;
+  --primary-container: #e6f8f1;
+  --surface: #ffffff;
+  --surface-dim: #f5f5f7;
+  --surface-bright: #fbfbfd;
+  --on-surface: #1d1d1f;
+  --on-surface-variant: #6e6e73;
+  --outline: #86868b;
+  --outline-variant: #e5e5ea;
+}
+
+@theme inline {
+  --color-surface: #ffffff;
+  --color-surface-dim: #f5f5f7;
+  --color-surface-bright: #fbfbfd;
+  --color-surface-container: #f5f5f7;
+  --color-surface-container-low: #fbfbfd;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-high: #ebebed;
+  --color-surface-container-highest: #e2e2e7;
+  --color-on-surface: #1d1d1f;
+  --color-on-surface-variant: #6e6e73;
+  --color-outline: #86868b;
+  --color-outline-variant: #e5e5ea;
+  --color-primary: #00a86b;
+  --color-primary-container: #e6f8f1;
+  --color-on-primary: #ffffff;
+  --color-on-primary-container: #003823;
+  --color-secondary: #ff9500;
+  --color-error: #ff3b30;
+  --color-error-container: #ffebe9;
+  --font-sans: "Geist", -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+}
+
+html, body { margin: 0; padding: 0; min-height: 100%; background: #EEF2F6; color: #0F172A; font-family: "Geist", -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif; }
+body { overscroll-behavior: none; -webkit-font-smoothing: antialiased; }
+main > :first-child { margin-top: 0 !important; }
+main > :last-child { margin-bottom: 0 !important; }
+::-webkit-scrollbar { display: none; }
+.material-symbols-outlined { font-family: "Material Symbols Outlined"; font-weight: normal; font-style: normal; font-size: 24px; line-height: 1; letter-spacing: normal; text-transform: none; display: inline-block; white-space: nowrap; word-wrap: normal; direction: ltr; -webkit-font-feature-settings: "liga"; -webkit-font-smoothing: antialiased; font-feature-settings: "liga"; }
+
+/* Custom UI Elements */
+
+/* custom button preset */
+.btn-primary, .btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+
+  font-family: inherit;
+  text-decoration: none;
+  cursor: pointer;
+
+  transition: transform 180ms ease, filter 180ms ease;
+}
+
+.btn-primary {
+  background: linear-gradient(145deg, #00b372, #008f5a);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow:
+    6px 6px 16px rgba(0, 168, 107, 0.35),
+    -4px -4px 12px rgba(255, 255, 255, 0.8),
+    inset 2px 2px 3px rgba(255, 255, 255, 0.3),
+    inset -2px -2px 3px rgba(0, 0, 0, 0.15);
+
+  color: white;
+  font-weight: 600;
+}
+
+.btn-secondary {
+  background: #EEF2F6;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  box-shadow:
+    6px 6px 14px rgba(166, 175, 195, 0.4),
+    -6px -6px 14px rgba(255, 255, 255, 0.95),
+    inset 1px 1px 2px rgba(255, 255, 255, 0.8);
+
+  color: #1E293B;
+  font-weight: 500;
+}
+
+.btn-primary:hover, .btn-secondary:hover {
+  transform: scale(1.02);
+}
+
+.btn-primary:active, .btn-secondary:active {
+  transform: scale(0.98);
+}
+
+.btn-primary:focus-visible, .btn-secondary:focus-visible {
+  outline: 2px solid #008756;
+  outline-offset: 4px;
+}
+
+.btn-primary:disabled, .btn-secondary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  filter: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn-primary,
+  .btn-secondary {
+    transition: none;
+  }
+}
+
+@keyframes hold-to-delete-progress {
+  from {
+    stroke-dashoffset: 87.965;
+  }
+
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.hold-to-delete-progress {
+  animation-name: hold-to-delete-progress;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
