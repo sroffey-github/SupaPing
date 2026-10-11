@@ -31,7 +31,7 @@ export default function LoginPage() {
         await supabase.auth.signInWithOAuth({
           provider,
           options: {
-            redirectTo: `${window.location.origin}/auth/callback?next=/dashboard`,
+            redirectTo: `https://supaping.app/auth/callback?next=%2Fdashboard`,
           },
         });
 
