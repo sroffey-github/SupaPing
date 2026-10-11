@@ -189,21 +189,33 @@ export async function addDatabase(values: AddDatabaseInput) {
 
   const input = validateDatabaseInput(values);
 
-  const { data, error } = await supabase
-    .from("database_instances")
-    .insert({
-      user_id: user.id,
-      name: input.name,
-      description: input.description,
-      project_url: input.projectUrl,
-      publishable_key: input.publishableKey,
-    })
-    .select("id")
-    .single();
+  const { data, error } = await supabase.rpc("register_database", {
+    p_name: input.name,
+    p_description: input.description,
+    p_project_url: input.projectUrl,
+    p_publishable_key: input.publishableKey,
+  });
 
   if (error) {
-    // Do not log URLs, keys, or raw database error messages.
-    console.error("Failed to save SupaPing database:", error.code);
+    // Log only the error code; never log keys or project URLs.
+    console.error("Failed to register SupaPing database:", error.code);
+
+    if (error.code === "P0001") {
+      switch (error.message) {
+        case "DATABASE_LIMIT_REACHED":
+          throw new Error(
+            "You've reached your database limit. Upgrade to Pro to register up to 100 databases."
+          );
+        case "PROFILE_NOT_FOUND":
+          throw new Error(
+            "Your account profile could not be found. Please contact support."
+          );
+        case "AUTH_REQUIRED":
+          throw new Error(
+            "Your session has expired. Please sign in again."
+          );
+      }
+    }
 
     if (error.code === "23505") {
       throw new Error("This database has already been registered.");
@@ -214,7 +226,7 @@ export async function addDatabase(values: AddDatabaseInput) {
 
   revalidatePath("/dashboard");
 
-  return { id: data.id };
+  return { id: data as string };
 }
 
 export async function deleteDatabase(id: string) {

@@ -21,6 +21,10 @@ type StatCardProps = {
 
 type DashboardStatsProps = {
   registeredInstances: number;
+  heartbeatsToday: number;
+  averageLatency: number | null;
+  hibernationPreventionsToday: number;
+  statsError: boolean;
 };
 
 function StatCard({
@@ -97,7 +101,13 @@ function StatCard({
 
 export default function DashboardStats({
   registeredInstances,
+  heartbeatsToday,
+  averageLatency,
+  hibernationPreventionsToday,
+  statsError,
 }: DashboardStatsProps) {
+  const unavailable = statsError;
+
   return (
     <section
       aria-label="Monitoring statistics"
@@ -115,31 +125,53 @@ export default function DashboardStats({
 
       <StatCard
         title="Heartbeats Sent Today"
-        value="—"
+        value={unavailable ? "—" : String(heartbeatsToday)}
         suffix="pings"
-        detail="No heartbeat history available"
-        indicatorText="Waiting for monitoring data"
+        detail="Heartbeat attempts today"
+        indicatorText={
+          unavailable
+            ? "Unable to load heartbeat data"
+            : "Your heartbeat attempts today"
+        }
         icon={Heart}
         iconStyle="bg-[#F0EDF0] text-[#303039]"
       />
 
       <StatCard
         title="Average Edge Latency"
-        value="—"
+        value={
+          unavailable || averageLatency === null
+            ? "—"
+            : String(averageLatency)
+        }
         suffix="ms"
-        detail="No latency measurements available"
+        detail="Average successful response time"
         indicator="bars"
-        indicatorText="Waiting for response-time data"
+        indicatorText={
+          unavailable
+            ? "Unable to load latency data"
+            : averageLatency === null
+              ? "No successful latency measurements today"
+              : "Average successful heartbeat latency today"
+        }
         icon={Gauge}
         iconStyle="bg-[#F0EDF0] text-[#303039]"
       />
 
       <StatCard
         title="Hibernate Prevention"
-        value="—"
+        value={
+          unavailable
+            ? "—"
+            : String(hibernationPreventionsToday)
+        }
         suffix="saved"
-        detail="No successful keep-alives recorded"
-        indicatorText="Waiting for heartbeat history"
+        detail="Recorded dormancy preventions today"
+        indicatorText={
+          unavailable
+            ? "Unable to load heartbeat data"
+            : "Successful keep-alives recorded today"
+        }
         icon={Leaf}
         iconStyle="bg-[#C9FBE8] text-[#00794D]"
       />

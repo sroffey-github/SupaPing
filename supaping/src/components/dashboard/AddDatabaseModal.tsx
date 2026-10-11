@@ -67,7 +67,15 @@ create table if not exists public.keep_alive (
 -- Enable Row Level Security.
 alter table public.keep_alive enable row level security;
 
--- Remove the previous policies so this script is repeatable.
+-- Grant the schema access required by the Supabase API.
+grant usage on schema public to anon, authenticated;
+
+-- Grant the table permissions required by SupaPing's upsert.
+grant select, insert, update
+on table public.keep_alive
+to anon, authenticated;
+
+-- Remove existing policies so this script is repeatable.
 drop policy if exists "Allow heartbeat row read"
 on public.keep_alive;
 
@@ -77,48 +85,26 @@ on public.keep_alive;
 drop policy if exists "Allow heartbeat row update"
 on public.keep_alive;
 
--- Remove existing table-level privileges from public API roles.
-revoke all on table public.keep_alive from anon, authenticated;
-
--- Grant only the column privileges required by the current upsert.
-grant select (id)
-on table public.keep_alive
-to anon, authenticated;
-
-grant insert (id, last_ping_at, ping_token)
-on table public.keep_alive
-to anon, authenticated;
-
-grant update (last_ping_at, ping_token)
-on table public.keep_alive
-to anon, authenticated;
-
--- Allow visibility of the heartbeat row for the upsert operation.
--- Only the id column is selectable through SQL privileges.
+-- Allow access only to the heartbeat row.
 create policy "Allow heartbeat row read"
 on public.keep_alive
 for select
 to anon, authenticated
 using (id = 1);
 
--- Allow creation of the single heartbeat row.
 create policy "Allow heartbeat row insert"
 on public.keep_alive
 for insert
 to anon, authenticated
 with check (id = 1);
 
--- Allow updates only to the single heartbeat row.
 create policy "Allow heartbeat row update"
 on public.keep_alive
 for update
 to anon, authenticated
 using (id = 1)
 with check (id = 1);
-
--- Remove unnecessary schema privileges only if your project
--- does not require them for other existing functionality.
--- Do not revoke schema USAGE globally without checking first.`;
+`;
 
 function validateProjectUrlInput(value: string): string | null {
   const input = value.trim();

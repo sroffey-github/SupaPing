@@ -14,6 +14,7 @@ import Card from "@/components/ui/Card";
 import InsetPanel from "@/components/ui/InsetPanel";
 import StatusPill from "@/components/ui/StatusPill";
 import StatusDot from "@/components/ui/StatusDot";
+import SiteFooter from "@/components/layout/SiteFooter";
 
 const stats = [
   {
@@ -84,6 +85,43 @@ const principles = [
   },
 ];
 
+const pricingPlans = [
+  {
+    name: "Free",
+    description: "Everything you need to keep a project active.",
+    price: "£0",
+    period: "forever",
+    databaseLimit: "1 database",
+    features: [
+      "1 registered Supabase database",
+      "Automated heartbeat requests",
+      "Heartbeat history and results",
+      "Response time measurements",
+      "Database health status",
+    ],
+    cta: "Get Started",
+    href: "/login",
+    highlighted: false,
+  },
+  {
+    name: "Pro",
+    description: "For developers managing multiple Supabase projects.",
+    price: "Coming soon",
+    period: "pricing announced later",
+    databaseLimit: "Up to 100 databases",
+    features: [
+      "Everything in Free",
+      "Up to 100 registered databases",
+      "Manage multiple projects in one dashboard",
+      "Centralised heartbeat monitoring",
+      "Ideal for larger project collections",
+    ],
+    cta: "Request Pro Access",
+    href: "mailto:support@supaping.app?subject=SupaPing%20Pro%20Access",
+    highlighted: true,
+  },
+];
+
 function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
     <span className="font-mono text-[12px] font-bold uppercase tracking-wider text-[#008756]">
@@ -127,6 +165,12 @@ export default function Home() {
               className="transition-colors hover:text-[#1d1d1f]"
             >
               How it works
+            </a>
+            <a
+              href="#pricing"
+              className="transition-colors hover:text-[#1d1d1f]"
+            >
+              Pricing
             </a>
             <a
               href="#philosophy"
@@ -486,6 +530,117 @@ export default function Home() {
           </div>
         </section>
 
+        {/* Pricing */}
+        <section
+          id="pricing"
+          className="relative w-full px-6 py-24"
+          style={{
+            borderTop: "1px solid rgba(255, 255, 255, 0.8)",
+            borderBottom: "1px solid rgba(166, 175, 195, 0.2)",
+          }}
+        >
+          <div className="mx-auto flex max-w-[1100px] flex-col gap-12">
+            <div className="mx-auto flex max-w-2xl flex-col items-center gap-3 text-center">
+              <SectionLabel>// SIMPLE PRICING</SectionLabel>
+
+              <h2 className="text-[34px] font-semibold tracking-tight text-[#0F172A] sm:text-[40px]">
+                Start free. Scale when you need to.
+              </h2>
+
+              <p className="text-[16px] leading-relaxed text-[#334155]">
+                Start with one Supabase project for free. When you need to
+                monitor more projects, Pro will give you room to grow.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 items-stretch gap-6 md:grid-cols-2">
+              {pricingPlans.map((plan) => (
+                <Card
+                  key={plan.name}
+                  as="article"
+                  padding="lg"
+                  className={`relative gap-7 p-7 sm:p-9 ${
+                    plan.highlighted
+                      ? "border border-[#008756]/30"
+                      : ""
+                  }`}
+                  style={{
+                    boxShadow: plan.highlighted
+                      ? "10px 10px 26px rgba(0, 135, 86, 0.10), -8px -8px 24px rgba(255, 255, 255, 0.95)"
+                      : "8px 8px 20px rgba(166, 175, 195, 0.30), -8px -8px 20px rgba(255, 255, 255, 0.95)",
+                  }}
+                >
+                  {plan.highlighted && (
+                    <span className="absolute right-6 top-6 rounded-full bg-[#DDF8EB] px-3 py-1 font-mono text-[10px] font-bold uppercase tracking-wider text-[#00794D]">
+                      For growing projects
+                    </span>
+                  )}
+
+                  <div className="flex flex-col gap-3 pr-4">
+                    <h3 className="text-[22px] font-semibold tracking-tight text-[#0F172A]">
+                      {plan.name}
+                    </h3>
+
+                    <p className="min-h-12 max-w-sm text-[14px] leading-relaxed text-[#475569]">
+                      {plan.description}
+                    </p>
+
+                    <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1 pt-2">
+                      <span className="text-[38px] font-bold tracking-tight text-[#0F172A]">
+                        {plan.price}
+                      </span>
+                      <span className="text-[12px] text-[#64748B]">
+                        {plan.period}
+                      </span>
+                    </div>
+
+                    <div className="mt-1 inline-flex w-fit items-center gap-2 rounded-xl bg-[#E6F8F1] px-3 py-2 text-[13px] font-semibold text-[#006e46]">
+                      <Database size={16} />
+                      {plan.databaseLimit}
+                    </div>
+                  </div>
+
+                  <div className="h-px w-full bg-slate-300/50" />
+
+                  <ul className="flex flex-1 flex-col gap-4">
+                    {plan.features.map((feature) => (
+                      <li
+                        key={feature}
+                        className="flex items-start gap-3 text-[14px] leading-relaxed text-[#334155]"
+                      >
+                        <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#DDF8EB] text-[#008756]">
+                          <Check size={13} strokeWidth={2.5} />
+                        </span>
+                        {feature}
+                      </li>
+                    ))}
+                  </ul>
+
+                  <Button
+                    href={plan.href}
+                    variant={plan.highlighted ? "primary" : "secondary"}
+                    size="lg"
+                    icon={<ArrowRight size={18} />}
+                  >
+                    {plan.cta}
+                  </Button>
+
+                  {plan.highlighted && (
+                    <p className="text-center text-[11px] leading-relaxed text-[#64748B]">
+                      Pro access is currently managed manually. Pricing
+                      and availability will be announced later.
+                    </p>
+                  )}
+                </Card>
+              ))}
+            </div>
+
+            <p className="text-center text-[12px] text-[#64748B]">
+              No payment details required to get started with Free.
+            </p>
+          </div>
+        </section>
+
         {/* Final CTA */}
         <section className="w-full px-6 py-20">
           <Card
@@ -522,24 +677,7 @@ export default function Home() {
       </main>
 
       {/* Footer */}
-      <footer
-        className="w-full border-t py-6"
-        style={{
-          background: "#EEF2F6",
-          borderTop: "1px solid rgba(166, 175, 195, 0.25)",
-          color: "#475569",
-        }}
-      >
-        <div className="mx-auto flex max-w-[1280px] flex-col items-center justify-between gap-4 px-6 sm:flex-row">
-          <span className="font-mono text-[12px] text-[#86868b]">
-            SupaPing // Supabase Heartbeat Monitoring
-          </span>
-
-          <span className="text-center font-mono text-[12px] text-[#86868b]">
-            © 2026 SupaPing. Built for Supabase projects.
-          </span>
-        </div>
-      </footer>
+      <SiteFooter />
     </>
   );
 }

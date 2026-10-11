@@ -8,6 +8,7 @@ import Card from "@/components/ui/Card";
 import StatusDot from "@/components/ui/StatusDot";
 import GitHubButton from "@/components/auth/GitHubButton";
 import GoogleButton from "@/components/auth/GoogleButton";
+import SiteFooter from "@/components/layout/SiteFooter";
 
 type OAuthProvider = "github" | "google";
 
@@ -156,22 +157,7 @@ export default function LoginPage() {
       </section>
 
       {/* Footer */}
-      <footer className="relative z-10 flex items-center justify-center px-6 pb-6 pt-3 text-[12px] text-[#52615A] sm:justify-end sm:px-12">
-        <nav className="flex flex-wrap items-center gap-x-6 gap-y-2">
-          <Link
-            href="/terms"
-            className="transition-colors hover:text-[#008A58]"
-          >
-            Terms of Service
-          </Link>
-          <Link
-            href="/privacy"
-            className="transition-colors hover:text-[#008A58]"
-          >
-            Privacy
-          </Link>
-        </nav>
-      </footer>
+      <SiteFooter />
     </main>
   );
 }

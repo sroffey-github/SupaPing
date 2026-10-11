@@ -1,16 +1,36 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 
+function safeNextPath(value: string | null): string {
+  if (!value) return "/dashboard";
+
+  // Require a local absolute path, not a URL or protocol-relative path.
+  if (!value.startsWith("/") || value.startsWith("//")) {
+    return "/dashboard";
+  }
+
+  // Reject backslashes, control characters, and encoded path tricks.
+  if (value.includes("\\") || /[\u0000-\u001F\u007F]/.test(value)) {
+    return "/dashboard";
+  }
+
+  try {
+    const parsed = new URL(value, "https://local.invalid");
+
+    if (parsed.origin !== "https://local.invalid") {
+      return "/dashboard";
+    }
+
+    return `${parsed.pathname}${parsed.search}${parsed.hash}`;
+  } catch {
+    return "/dashboard";
+  }
+}
+
 export async function GET(request: NextRequest) {
   const requestUrl = new URL(request.url);
   const code = requestUrl.searchParams.get("code");
-  const requestedNext = requestUrl.searchParams.get("next");
-
-  // Only allow local, relative paths to prevent open redirects.
-  const next =
-    requestedNext?.startsWith("/") && !requestedNext.startsWith("//")
-      ? requestedNext
-      : "/dashboard";
+  const next = safeNextPath(requestUrl.searchParams.get("next"));
 
   if (!code) {
     return NextResponse.redirect(

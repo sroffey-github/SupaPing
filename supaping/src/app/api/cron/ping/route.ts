@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { sendCronAlert } from "@/lib/email/resend";
 
 const GENERIC_ERROR = "Couldn't ping this database.";
 
@@ -15,6 +16,11 @@ type HeartbeatResult = {
   latencyMs: number | null;
   errorCode: string | null;
   attemptedAt: string;
+};
+
+type PingOutcome = {
+  succeeded: boolean;
+  persisted: boolean;
 };
 
 function validateProjectUrl(value: string): URL | null {
@@ -41,7 +47,7 @@ async function saveHeartbeatResult(
   supabase: ReturnType<typeof createAdminClient>,
   instance: Instance,
   result: HeartbeatResult
-) {
+): Promise<boolean> {
   const { error: eventError } = await supabase
     .from("heartbeat_events")
     .insert({
@@ -92,34 +98,34 @@ async function saveHeartbeatResult(
 async function pingInstance(
   supabase: ReturnType<typeof createAdminClient>,
   instance: Instance
-) {
+): Promise<PingOutcome> {
   const attemptedAt = new Date().toISOString();
 
   const projectUrl = validateProjectUrl(instance.project_url);
 
   if (!projectUrl) {
-    await saveHeartbeatResult(supabase, instance, {
+    const persisted = await saveHeartbeatResult(supabase, instance, {
       succeeded: false,
       latencyMs: null,
       errorCode: "INVALID_TARGET_URL",
       attemptedAt,
     });
 
-    return { succeeded: false, error: "Invalid target URL" };
+    return { succeeded: false, persisted };
   }
 
   if (
     typeof instance.publishable_key !== "string" ||
     !instance.publishable_key.trim()
   ) {
-    await saveHeartbeatResult(supabase, instance, {
+    const persisted = await saveHeartbeatResult(supabase, instance, {
       succeeded: false,
       latencyMs: null,
       errorCode: "MISSING_PUBLISHABLE_KEY",
       attemptedAt,
     });
 
-    return { succeeded: false, error: "Missing publishable key" };
+    return { succeeded: false, persisted };
   }
 
   const startedAt = Date.now();
@@ -153,32 +159,24 @@ async function pingInstance(
         status: response.status,
       });
 
-      const saved = await saveHeartbeatResult(supabase, instance, {
+      const persisted = await saveHeartbeatResult(supabase, instance, {
         succeeded: false,
         latencyMs,
         errorCode: `TARGET_HTTP_${response.status}`,
         attemptedAt,
       });
 
-      return {
-        succeeded: false,
-        persisted: saved,
-        error: `Target returned HTTP ${response.status}`,
-      };
+      return { succeeded: false, persisted };
     }
 
-    const saved = await saveHeartbeatResult(supabase, instance, {
+    const persisted = await saveHeartbeatResult(supabase, instance, {
       succeeded: true,
       latencyMs,
       errorCode: null,
       attemptedAt,
     });
 
-    return {
-      succeeded: true,
-      persisted: saved,
-      responseTimeMs: latencyMs,
-    };
+    return { succeeded: true, persisted };
   } catch (error) {
     const latencyMs = Date.now() - startedAt;
 
@@ -192,18 +190,91 @@ async function pingInstance(
       errorCode,
     });
 
-    const saved = await saveHeartbeatResult(supabase, instance, {
+    const persisted = await saveHeartbeatResult(supabase, instance, {
       succeeded: false,
       latencyMs,
       errorCode,
       attemptedAt,
     });
 
-    return {
-      succeeded: false,
-      persisted: saved,
-      error: errorCode,
-    };
+    return { succeeded: false, persisted };
+  }
+}
+
+type RunStatus = "succeeded" | "partial_failure" | "failed";
+
+async function finishCronRun(
+  supabase: ReturnType<typeof createAdminClient>,
+  runId: string,
+  values: {
+    status: RunStatus;
+    total: number;
+    succeeded: number;
+    failed: number;
+    persistenceFailures: number;
+    startedAtMs: number;
+    errorCode?: string | null;
+  }
+): Promise<boolean> {
+  const completedAt = new Date().toISOString();
+
+  const { error } = await supabase
+    .from("cron_runs")
+    .update({
+      completed_at: completedAt,
+      status: values.status,
+      total_instances: values.total,
+      succeeded: values.succeeded,
+      failed: values.failed,
+      persistence_failures: values.persistenceFailures,
+      error_code: values.errorCode ?? null,
+      duration_ms: Math.max(0, Date.now() - values.startedAtMs),
+    })
+    .eq("id", runId);
+
+  if (error) {
+    console.error("Failed to finalize cron run:", {
+      runId,
+      code: error.code,
+      message: error.message,
+    });
+
+    return false;
+  }
+
+  return true;
+}
+
+async function sendAndRecordCronAlert(
+  supabase: ReturnType<typeof createAdminClient>,
+  runId: string,
+  subject: string,
+  message: string
+): Promise<boolean> {
+  try {
+    await sendCronAlert({ subject, message });
+
+    const { error } = await supabase
+      .from("cron_runs")
+      .update({ alerts_sent: 1 })
+      .eq("id", runId);
+
+    if (error) {
+      console.error("Failed to record cron alert:", {
+        runId,
+        code: error.code,
+        message: error.message,
+      });
+    }
+
+    return true;
+  } catch (error) {
+    console.error("Failed to send cron alert:", {
+      runId,
+      error: error instanceof Error ? error.message : "Unknown error",
+    });
+
+    return false;
   }
 }
 
@@ -212,20 +283,66 @@ export async function GET(request: NextRequest) {
 
   if (!secret) {
     console.error("CRON_SECRET is not configured.");
+
     return NextResponse.json(
       { error: "Cron endpoint is not configured." },
       { status: 500 }
     );
   }
 
-  // Vercel Cron sends this bearer token when CRON_SECRET is configured.
   if (request.headers.get("authorization") !== `Bearer ${secret}`) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  try {
-    const supabase = createAdminClient();
+  const startedAtMs = Date.now();
+  const startedAt = new Date(startedAtMs).toISOString();
 
+  let supabase: ReturnType<typeof createAdminClient>;
+
+  try {
+    supabase = createAdminClient();
+  } catch (error) {
+    console.error(
+      "Failed to initialize cron database client:",
+      error instanceof Error ? error.message : "Unknown error"
+    );
+
+    return NextResponse.json(
+      { error: "Could not initialize cron execution." },
+      { status: 500 }
+    );
+  }
+
+  // Create the run record before processing any instances.
+  const { data: run, error: runInsertError } = await supabase
+    .from("cron_runs")
+    .insert({
+      started_at: startedAt,
+      status: "running",
+    })
+    .select("id")
+    .single();
+
+  if (runInsertError || !run) {
+    console.error("Failed to create cron run record:", {
+      code: runInsertError?.code,
+      message: runInsertError?.message,
+    });
+
+    return NextResponse.json(
+      { error: "Could not record cron execution." },
+      { status: 500 }
+    );
+  }
+
+  const runId: string = run.id;
+
+  let total = 0;
+  let succeeded = 0;
+  let failed = 0;
+  let persistenceFailures = 0;
+
+  try {
     const { data: instances, error } = await supabase
       .from("database_instances")
       .select("id, user_id, project_url, publishable_key")
@@ -233,22 +350,46 @@ export async function GET(request: NextRequest) {
 
     if (error) {
       console.error("Failed to retrieve cron instances:", {
+        runId,
         code: error.code,
         message: error.message,
       });
 
+      await finishCronRun(supabase, runId, {
+        status: "failed",
+        total,
+        succeeded,
+        failed,
+        persistenceFailures,
+        startedAtMs,
+        errorCode: "INSTANCE_QUERY_FAILED",
+      });
+
+      await sendAndRecordCronAlert(
+        supabase,
+        runId,
+        "SupaPing critical alert: unable to retrieve databases",
+        [
+          "SupaPing could not retrieve the registered databases.",
+          "",
+          `Run ID: ${runId}`,
+          "Error code: INSTANCE_QUERY_FAILED",
+          `Details: ${error.message}`,
+          `Time: ${new Date().toISOString()}`,
+        ].join("\n")
+      );
+
       return NextResponse.json(
-        { error: "Could not retrieve registered databases." },
+        { error: "Could not retrieve registered databases.", runId },
         { status: 500 }
       );
     }
 
-    let succeeded = 0;
-    let failed = 0;
-    let persistenceFailures = 0;
+    const targets = (instances ?? []) as Instance[];
+    total = targets.length;
 
     // Deliberately process one target at a time.
-    for (const instance of (instances ?? []) as Instance[]) {
+    for (const instance of targets) {
       const result = await pingInstance(supabase, instance);
 
       if (result.succeeded) {
@@ -257,33 +398,118 @@ export async function GET(request: NextRequest) {
         failed++;
       }
 
-      if ("persisted" in result && result.persisted === false) {
+      if (!result.persisted) {
         persistenceFailures++;
       }
 
       console.info("Cron heartbeat completed:", {
+        runId,
         instanceId: instance.id,
         succeeded: result.succeeded,
-        persisted: "persisted" in result ? result.persisted : undefined,
+        persisted: result.persisted,
       });
+    }
+
+    const status: RunStatus =
+      failed > 0 || persistenceFailures > 0
+        ? "partial_failure"
+        : "succeeded";
+
+    
+    const finalized = await finishCronRun(supabase, runId, {
+      status,
+      total,
+      succeeded,
+      failed,
+      persistenceFailures,
+      startedAtMs,
+    });
+
+    if (!finalized) {
+      return NextResponse.json(
+        { error: "Could not finalize cron execution.", runId },
+        { status: 500 }
+      );
+    }
+
+    if (status === "partial_failure") {
+      await sendAndRecordCronAlert(
+        supabase,
+        runId,
+        `SupaPing alert: ${failed} heartbeat failure(s)`,
+        [
+          "A SupaPing cron run completed with errors.",
+          "",
+          `Run ID: ${runId}`,
+          `Status: ${status}`,
+          `Total databases: ${total}`,
+          `Successful heartbeats: ${succeeded}`,
+          `Failed heartbeats: ${failed}`,
+          `Persistence failures: ${persistenceFailures}`,
+          `Duration: ${Date.now() - startedAtMs} ms`,
+          `Completed at: ${new Date().toISOString()}`,
+        ].join("\n")
+      );
     }
 
     return NextResponse.json({
       success: true,
-      total: instances?.length ?? 0,
+      runId,
+      status,
+      total,
       succeeded,
       failed,
       persistenceFailures,
+      durationMs: Date.now() - startedAtMs,
       completedAt: new Date().toISOString(),
     });
   } catch (error) {
-    console.error(
-      "Cron heartbeat job failed:",
-      error instanceof Error ? error.message : "Unknown error"
+    console.error("Cron heartbeat job failed:", {
+      runId,
+      error: error instanceof Error ? error.message : "Unknown error",
+    });
+
+    // Preserve whatever totals were collected before the unexpected error.
+    await finishCronRun(supabase, runId, {
+      status: "failed",
+      total,
+      succeeded,
+      failed,
+      persistenceFailures,
+      startedAtMs,
+      errorCode: "CRON_EXECUTION_FAILED",
+    });
+
+    
+    await sendAndRecordCronAlert(
+      supabase,
+      runId,
+      "SupaPing critical alert: cron execution failed",
+      [
+        "The SupaPing cron execution failed unexpectedly.",
+        "",
+        `Run ID: ${runId}`,
+        "Error code: CRON_EXECUTION_FAILED",
+        `Error: ${
+          error instanceof Error ? error.message : "Unknown error"
+        }`,
+        `Databases processed: ${total}`,
+        `Successful heartbeats: ${succeeded}`,
+        `Failed heartbeats: ${failed}`,
+        `Persistence failures: ${persistenceFailures}`,
+        `Time: ${new Date().toISOString()}`,
+      ].join("\n")
     );
 
     return NextResponse.json(
-      { error: GENERIC_ERROR },
+      {
+        error: GENERIC_ERROR,
+        runId,
+        total,
+        succeeded,
+        failed,
+        persistenceFailures,
+      },
       { status: 500 }
     );
   }
