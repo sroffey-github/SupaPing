@@ -10,9 +10,7 @@ function isExactRoute(pathname: string, routes: string[]) {
 }
 
 export async function updateSession(request: NextRequest) {
-  let supabaseResponse = NextResponse.next({
-    request,
-  });
+  let supabaseResponse = NextResponse.next({ request });
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -27,9 +25,7 @@ export async function updateSession(request: NextRequest) {
             request.cookies.set(name, value);
           });
 
-          supabaseResponse = NextResponse.next({
-            request,
-          });
+          supabaseResponse = NextResponse.next({ request });
 
           cookiesToSet.forEach(({ name, value, options }) => {
             supabaseResponse.cookies.set(name, value, options);
@@ -39,23 +35,21 @@ export async function updateSession(request: NextRequest) {
     }
   );
 
-  // Verify the access token and refresh the session if needed.
-  const { data, error } = await supabase.auth.getClaims();
-
-  const isAuthenticated = !error && data?.claims != null;
   const { pathname } = request.nextUrl;
 
-  // Allow OAuth callbacks and other auth endpoints to complete.
+  // Let the OAuth callback exchange its code and establish the session.
   if (pathname.startsWith(AUTH_CALLBACK_PREFIX)) {
     return supabaseResponse;
   }
+
+  const { data, error } = await supabase.auth.getClaims();
+  const isAuthenticated = !error && data?.claims != null;
 
   const isPublicOnlyRoute = isExactRoute(
     pathname,
     PUBLIC_ONLY_ROUTES
   );
 
-  // Authenticated users should not see the landing, login or signup pages.
   if (isAuthenticated && isPublicOnlyRoute) {
     const redirectUrl = request.nextUrl.clone();
     redirectUrl.pathname = "/dashboard";
@@ -64,7 +58,6 @@ export async function updateSession(request: NextRequest) {
     return NextResponse.redirect(redirectUrl);
   }
 
-  // Unauthenticated users may only access the public-only routes.
   if (!isAuthenticated && !isPublicOnlyRoute) {
     const redirectUrl = request.nextUrl.clone();
     redirectUrl.pathname = "/login";
