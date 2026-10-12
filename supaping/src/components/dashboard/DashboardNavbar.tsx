@@ -167,7 +167,7 @@ export default function DashboardNavbar({
           />
 
           <span className="truncate text-xl font-bold tracking-tight text-[#1E293B] sm:text-[22px]">
-            Supa<span className="text-[#00A86B]">Ping</span>
+            Supa<span className="text-primary-strong">Ping</span>
           </span>
         </Link>
 
@@ -213,7 +213,7 @@ export default function DashboardNavbar({
 
             <ChevronDown
               size={15}
-              className={`shrink-0 text-[#64748B] transition-transform ${
+              className={`shrink-0 text-on-surface-variant transition-transform ${
                 menuOpen ? "rotate-180" : ""
               }`}
             />
@@ -231,7 +231,7 @@ export default function DashboardNavbar({
                   {displayName}
                 </p>
                 {profile.email && (
-                  <p className="mt-1 truncate text-xs text-[#64748B]">
+                  <p className="mt-1 truncate text-xs text-on-surface-variant">
                     {profile.email}
                   </p>
                 )}
@@ -242,9 +242,9 @@ export default function DashboardNavbar({
                   href="/settings"
                   role="menuitem"
                   onClick={() => setMenuOpen(false)}
-                  className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-[#334155] transition hover:bg-white/70 hover:text-[#008756] focus-visible:outline-2 focus-visible:outline-[#00A86B]"
+                  className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-[#334155] transition hover:bg-white/70 hover:text-primary-strong focus-visible:outline-2 focus-visible:outline-[#00A86B]"
                 >
-                  <Settings size={17} className="text-[#64748B]" />
+                  <Settings size={17} className="text-on-surface-variant" />
                   <span>Settings</span>
                 </Link>
 

@@ -268,8 +268,8 @@ export default function ConnectedDatabaseFleet({
           </span>
         </div>
 
-        <div className="flex items-center gap-2 text-xs text-[#64748B]">
-          <Activity size={14} className="text-[#00A86B]" />
+        <div className="flex items-center gap-2 text-xs text-on-surface-variant">
+          <Activity size={14} className="text-primary-strong" />
           <span>Registered with SupaPing</span>
         </div>
       </div>
@@ -350,7 +350,7 @@ export default function ConnectedDatabaseFleet({
                         {database.description}
                       </p>
                     ) : (
-                      <p className="mt-1 text-xs text-[#94A3B8]">
+                      <p className="mt-1 text-xs text-text-muted">
                         No description provided
                       </p>
                     )}
@@ -386,7 +386,7 @@ export default function ConnectedDatabaseFleet({
                       {lastHeartbeatLabel}
                     </p>
 
-                    <p className="text-[9px] text-[#94A3B8]">
+                    <p className="text-[9px] text-text-muted">
                       {latencyLabel}
                     </p>
                   </div>
@@ -498,7 +498,7 @@ export default function ConnectedDatabaseFleet({
 
                     <span
                       id={`delete-hint-${database.id}`}
-                      className="max-w-[66px] text-[10px] leading-4 text-[#94A3B8]"
+                      className="max-w-[66px] text-[10px] leading-4 text-text-muted"
                     >
                       {isDeleting
                         ? "Deleting…"
@@ -516,7 +516,7 @@ export default function ConnectedDatabaseFleet({
 
       {!loadError && filteredInstances.length === 0 && (
         <div className="rounded-[22px] border border-dashed border-[#CBD5D1] bg-white/60 px-6 py-12 text-center">
-          <Database size={25} className="mx-auto text-[#94A3B8]" />
+          <Database size={25} className="mx-auto text-text-muted" />
 
           <h3 className="mt-3 text-sm font-semibold text-[#334155]">
             {instances.length === 0
@@ -524,7 +524,7 @@ export default function ConnectedDatabaseFleet({
               : "No matching databases"}
           </h3>
 
-          <p className="mt-1 text-sm text-[#64748B]">
+          <p className="mt-1 text-sm text-on-surface-variant">
             {instances.length === 0
               ? "Add a database instance to get started."
               : "Try another search term or clear your search."}

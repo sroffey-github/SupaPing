@@ -15,7 +15,7 @@ export default function SegmentedControl({ value, onChange }: SegmentedControlPr
             className={`rounded-lg px-3 py-1.5 font-mono text-[11px] transition-all ${
                     value
                         ? "bg-[#EEF2F6] font-semibold text-[#0F172A] shadow"
-                        : "text-[#64748B]"
+                        : "text-on-surface-variant"
                     }`}
             >
             SupaPing Active
@@ -27,7 +27,7 @@ export default function SegmentedControl({ value, onChange }: SegmentedControlPr
             className={`rounded-lg px-3 py-1.5 font-mono text-[11px] transition-all ${
             !value
                 ? "bg-red-100 font-semibold text-red-600 shadow"
-                : "text-[#64748B]"
+                : "text-on-surface-variant"
             }`}
         >
             Simulate Sleep

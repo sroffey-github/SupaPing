@@ -24,7 +24,7 @@ export default function AccountUsage({
     <section className="rounded-[24px] border border-white/80 bg-white p-5 shadow-[0_8px_26px_rgba(148,163,184,0.12)] sm:p-6">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <p className="text-sm font-medium text-[#64748B]">
+          <p className="text-sm font-medium text-on-surface-variant">
             Your plan
           </p>
 
@@ -40,12 +40,12 @@ export default function AccountUsage({
         </div>
 
         <div className="text-right">
-          <p className="text-sm text-[#64748B]">
+          <p className="text-sm text-on-surface-variant">
             Registered databases
           </p>
           <p className="mt-1 text-xl font-bold text-[#202124]">
             {registeredInstances}
-            <span className="text-sm font-medium text-[#64748B]">
+            <span className="text-sm font-medium text-on-surface-variant">
               {" "}/ {databaseLimit}
             </span>
           </p>

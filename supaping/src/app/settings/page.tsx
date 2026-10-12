@@ -155,20 +155,20 @@ export default function SettingsPage() {
       <div className="mx-auto max-w-3xl">
         <Link
           href="/dashboard"
-          className="inline-flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-medium text-[#64748B] transition hover:bg-white/60 hover:text-[#008756] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#00A86B]"
+          className="inline-flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-medium text-on-surface-variant transition hover:bg-white/60 hover:text-primary-strong focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#00A86B]"
         >
           <ArrowLeft size={16} />
           Back to dashboard
         </Link>
 
         <header className="mb-9 mt-7">
-          <p className="mb-2 font-mono text-xs uppercase tracking-[0.2em] text-[#008756]">
+          <p className="mb-2 font-mono text-xs uppercase tracking-[0.2em] text-primary-strong">
             Your workspace
           </p>
           <h1 className="text-3xl font-bold tracking-tight text-[#1E293B] sm:text-4xl">
             Settings
           </h1>
-          <p className="mt-3 max-w-xl text-sm leading-6 text-[#64748B]">
+          <p className="mt-3 max-w-xl text-sm leading-6 text-on-surface-variant">
             Manage your account and preferences for SupaPing.
           </p>
         </header>
@@ -186,21 +186,21 @@ export default function SettingsPage() {
           {/* Account profile */}
           <section className="rounded-3xl border border-white/80 bg-[#EEF2F6] p-5 shadow-[6px_6px_18px_rgba(166,175,195,0.24),-6px_-6px_18px_rgba(255,255,255,0.85)] sm:p-7">
             <div className="mb-6 flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#D9F5E8] text-[#008756]">
+              <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#D9F5E8] text-primary-strong">
                 <UserRound size={19} />
               </div>
               <div>
                 <h2 className="font-semibold text-[#1E293B]">
                   Your account
                 </h2>
-                <p className="text-sm text-[#64748B]">
+                <p className="text-sm text-on-surface-variant">
                   Your profile information
                 </p>
               </div>
             </div>
 
             {loading ? (
-              <div className="flex items-center gap-3 py-5 text-sm text-[#64748B]">
+              <div className="flex items-center gap-3 py-5 text-sm text-on-surface-variant">
                 <LoaderCircle size={18} className="animate-spin" />
                 Loading account details…
               </div>
@@ -228,10 +228,10 @@ export default function SettingsPage() {
                   <p className="truncate font-semibold text-[#1E293B]">
                     {profile.name || "Your account"}
                   </p>
-                  <p className="mt-1 break-all text-sm text-[#64748B]">
+                  <p className="mt-1 break-all text-sm text-on-surface-variant">
                     {profile.email}
                   </p>
-                  <p className="mt-2 inline-flex items-center gap-1.5 text-xs font-medium text-[#008756]">
+                  <p className="mt-2 inline-flex items-center gap-1.5 text-xs font-medium text-primary-strong">
                     <CheckCircle2 size={14} />
                     Account connected
                   </p>
@@ -239,7 +239,7 @@ export default function SettingsPage() {
               </div>
             )}
 
-            <p className="mt-5 border-t border-[#D9E0E9] pt-4 text-xs leading-5 text-[#64748B]">
+            <p className="mt-5 border-t border-[#D9E0E9] pt-4 text-xs leading-5 text-on-surface-variant">
               Your name, email and profile image come from your sign-in
               provider. Profile editing is not currently available in SupaPing.
             </p>
@@ -248,14 +248,14 @@ export default function SettingsPage() {
           {/* Authentication */}
           <section className="rounded-3xl border border-white/80 bg-[#EEF2F6] p-5 shadow-[6px_6px_18px_rgba(166,175,195,0.24),-6px_-6px_18px_rgba(255,255,255,0.85)] sm:p-7">
             <div className="mb-5 flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#D9F5E8] text-[#008756]">
+              <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#D9F5E8] text-primary-strong">
                 <ShieldCheck size={19} />
               </div>
               <div>
                 <h2 className="font-semibold text-[#1E293B]">
                   Sign-in & security
                 </h2>
-                <p className="text-sm text-[#64748B]">
+                <p className="text-sm text-on-surface-variant">
                   How you access your account
                 </p>
               </div>
@@ -274,7 +274,7 @@ export default function SettingsPage() {
                 <p className="text-sm font-semibold text-[#1E293B]">
                   {providerName}
                 </p>
-                <p className="mt-1 text-xs text-[#64748B]">
+                <p className="mt-1 text-xs text-on-surface-variant">
                   Authentication provider
                 </p>
               </div>
@@ -284,7 +284,7 @@ export default function SettingsPage() {
               </span>
             </div>
 
-            <p className="mt-4 text-sm leading-6 text-[#64748B]">
+            <p className="mt-4 text-sm leading-6 text-on-surface-variant">
               SupaPing uses Google or GitHub for sign-in. Manage your
               password, multi-factor authentication and other sign-in
               security settings through your provider.
@@ -294,14 +294,14 @@ export default function SettingsPage() {
           {/* Legal */}
           <section className="rounded-3xl border border-white/80 bg-[#EEF2F6] p-5 shadow-[6px_6px_18px_rgba(166,175,195,0.24),-6px_-6px_18px_rgba(255,255,255,0.85)] sm:p-7">
             <div className="mb-4 flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#D9F5E8] text-[#008756]">
+              <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#D9F5E8] text-primary-strong">
                 <Globe size={19} />
               </div>
               <div>
                 <h2 className="font-semibold text-[#1E293B]">
                   Legal & privacy
                 </h2>
-                <p className="text-sm text-[#64748B]">
+                <p className="text-sm text-on-surface-variant">
                   Your data and our terms
                 </p>
               </div>
@@ -314,7 +314,7 @@ export default function SettingsPage() {
               <span className="text-sm font-medium text-[#334155]">
                 Privacy policy
               </span>
-              <ChevronRight size={17} className="text-[#94A3B8]" />
+              <ChevronRight size={17} className="text-text-muted" />
             </Link>
 
             <Link
@@ -324,7 +324,7 @@ export default function SettingsPage() {
               <span className="text-sm font-medium text-[#334155]">
                 Terms of service
               </span>
-              <ChevronRight size={17} className="text-[#94A3B8]" />
+              <ChevronRight size={17} className="text-text-muted" />
             </Link>
           </section>
 
@@ -392,7 +392,7 @@ export default function SettingsPage() {
                 onClick={() => setDeleteDialogOpen(false)}
                 disabled={deleting}
                 aria-label="Close confirmation"
-                className="rounded-lg p-2 text-[#64748B] transition hover:bg-white/70 disabled:opacity-50"
+                className="rounded-lg p-2 text-on-surface-variant transition hover:bg-white/70 disabled:opacity-50"
               >
                 <X size={18} />
               </button>
@@ -405,7 +405,7 @@ export default function SettingsPage() {
               Delete your account?
             </h2>
 
-            <p className="mt-3 text-sm leading-6 text-[#64748B]">
+            <p className="mt-3 text-sm leading-6 text-on-surface-variant">
               This permanently deletes your SupaPing account. Make sure you
               understand the consequences before continuing.
             </p>
@@ -426,7 +426,7 @@ export default function SettingsPage() {
               autoComplete="off"
               spellCheck={false}
               placeholder="Type DELETE"
-              className="mt-2 w-full rounded-xl border border-[#D5DDE7] bg-white/70 px-4 py-3 text-sm text-[#1E293B] outline-none transition placeholder:text-[#94A3B8] focus:border-red-300 focus:ring-2 focus:ring-red-100 disabled:opacity-60"
+              className="mt-2 w-full rounded-xl border border-[#D5DDE7] bg-white/70 px-4 py-3 text-sm text-[#1E293B] outline-none transition placeholder:text-text-muted focus:border-red-300 focus:ring-2 focus:ring-red-100 disabled:opacity-60"
             />
 
             {error && (

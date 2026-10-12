@@ -68,7 +68,7 @@ export default function LoginPage() {
 
           <span className="flex flex-col">
             <span className="text-[17px] font-semibold leading-5 tracking-tight">
-              Supa<span className="text-[#00A86B]">Ping</span>
+              Supa<span className="text-primary-strong">Ping</span>
             </span>
             <span className="text-[10px] font-medium leading-3 text-[#52615A]">
               Keep-Alive Infrastructure

@@ -274,19 +274,19 @@ export default function PrivacyPage() {
       <article className="mx-auto max-w-3xl">
         <a
           href="/"
-          className="font-mono text-sm text-[#008756] hover:underline"
+          className="font-mono text-sm text-primary-strong hover:underline"
         >
           ← Back to SupaPing
         </a>
 
         <header className="mb-12 mt-8">
-          <p className="mb-3 font-mono text-xs uppercase tracking-[0.2em] text-[#008756]">
+          <p className="mb-3 font-mono text-xs uppercase tracking-[0.2em] text-primary-strong">
             Legal
           </p>
           <h1 className="text-4xl font-semibold tracking-tight text-[#1E293B]">
             Privacy Policy
           </h1>
-          <p className="mt-4 text-sm text-[#64748B]">
+          <p className="mt-4 text-sm text-on-surface-variant">
             Effective date: 11 October 2026
           </p>
           <p className="mt-5 leading-7">
@@ -301,7 +301,7 @@ export default function PrivacyPage() {
               <h2 className="text-lg font-semibold text-[#1E293B]">
                 {section.title}
               </h2>
-              <div className="space-y-3 text-sm leading-7 text-[#475569] [&_a]:text-[#008756] [&_li]:ml-5 [&_li]:list-disc [&_ul]:space-y-2">
+              <div className="space-y-3 text-sm leading-7 text-[#475569] [&_a]:text-primary-strong [&_li]:ml-5 [&_li]:list-disc [&_ul]:space-y-2">
                 {section.content}
               </div>
             </section>

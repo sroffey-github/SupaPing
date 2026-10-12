@@ -83,7 +83,7 @@ export default function Input({
           }
           className={[
             "min-w-0 flex-1 bg-transparent py-3 text-[13px]",
-            "text-[#1E293B] outline-none placeholder:text-[#94A3B8]",
+            "text-[#1E293B] outline-none placeholder:text-text-muted",
             className,
           ].join(" ")}
         />
@@ -115,7 +115,7 @@ export default function Input({
       )}
 
       {!error && hint && (
-        <p id={`${inputId}-hint`} className="text-xs text-[#64748B]">
+        <p id={`${inputId}-hint`} className="text-xs text-on-surface-variant">
           {hint}
         </p>
       )}

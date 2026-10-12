@@ -14,10 +14,10 @@ export default function SiteFooter() {
       <div className="mx-auto flex max-w-[1280px] flex-col items-center justify-between gap-4 px-6 sm:flex-row">
         <Link
           href="/"
-          className="font-mono text-[12px] text-[#52615A] transition-colors hover:text-[#008756]"
+          className="font-mono text-[12px] text-[#52615A] transition-colors hover:text-primary-strong"
         >
-          Supa<span className="text-[#008756]">Ping</span>
-          <span className="text-[#86868b]"> // Keep-Alive Infrastructure</span>
+          Supa<span className="text-primary-strong">Ping</span>
+          <span className="text-text-muted"> // Keep-Alive Infrastructure</span>
         </Link>
 
         <nav
@@ -26,20 +26,20 @@ export default function SiteFooter() {
         >
           <Link
             href="/terms"
-            className="transition-colors hover:text-[#008756]"
+            className="transition-colors hover:text-primary-strong"
           >
             Terms of Service
           </Link>
 
           <Link
             href="/privacy"
-            className="transition-colors hover:text-[#008756]"
+            className="transition-colors hover:text-primary-strong"
           >
             Privacy Policy
           </Link>
         </nav>
 
-        <span className="text-center font-mono text-[11px] text-[#86868b]">
+        <span className="text-center font-mono text-[11px] text-text-muted">
           © 2026 SupaPing
         </span>
       </div>

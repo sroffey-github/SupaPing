@@ -40,7 +40,7 @@ export default function StatusPill({
 
       {secondaryLabel && (
         <>
-          <span className="text-[#94A3B8]">•</span>
+          <span className="text-text-muted">•</span>
           <span className="text-[#334155]">{secondaryLabel}</span>
         </>
       )}

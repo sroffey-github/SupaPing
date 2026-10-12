@@ -141,19 +141,19 @@ export default function TermsPage() {
       <article className="mx-auto max-w-3xl">
         <a
           href="/"
-          className="font-mono text-sm text-[#008756] hover:underline"
+          className="font-mono text-sm text-primary-strong hover:underline"
         >
           ← Back to SupaPing
         </a>
 
         <header className="mb-12 mt-8">
-          <p className="mb-3 font-mono text-xs uppercase tracking-[0.2em] text-[#008756]">
+          <p className="mb-3 font-mono text-xs uppercase tracking-[0.2em] text-primary-strong">
             Legal
           </p>
           <h1 className="text-4xl font-semibold tracking-tight text-[#1E293B]">
             Terms of Service
           </h1>
-          <p className="mt-4 text-sm text-[#64748B]">
+          <p className="mt-4 text-sm text-on-surface-variant">
             Effective date: 11 October 2026
           </p>
           <p className="mt-5 leading-7">

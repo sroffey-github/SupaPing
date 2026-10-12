@@ -25,7 +25,7 @@ const stats = [
   {
     value: "REST API",
     label: "Supabase connection",
-    color: "text-[#008756]",
+    color: "text-primary-strong",
   },
   {
     value: "Built-in",
@@ -124,7 +124,7 @@ const pricingPlans = [
 
 function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
-    <span className="font-mono text-[12px] font-bold uppercase tracking-wider text-[#008756]">
+    <span className="font-mono text-[12px] font-bold uppercase tracking-wider text-primary-strong">
       {children}
     </span>
   );
@@ -152,7 +152,7 @@ export default function Home() {
             />
 
             <span className="text-[17px] font-semibold tracking-tight text-[#1d1d1f]">
-              Supa<span className="text-[#00A86B]">Ping</span>
+              Supa<span className="text-primary-strong">Ping</span>
             </span>
           </a>
 
@@ -200,7 +200,7 @@ export default function Home() {
                 <h1 className="text-[46px] font-semibold leading-[1.08] tracking-[-0.035em] text-[#0F172A] sm:text-[56px]">
                   Your database.
                   <br />
-                  <span className="text-[#008756]">Keep it active.</span>
+                  <span className="text-primary-strong">Keep it active.</span>
                 </h1>
 
                 <p className="max-w-lg text-[17px] leading-[1.6] text-[#334155]">
@@ -219,7 +219,7 @@ export default function Home() {
                   href="#how-it-works"
                   variant="secondary"
                   size="md"
-                  icon={<CirclePlay size={20} className="text-[#008756]" />}
+                  icon={<CirclePlay size={20} className="text-primary-strong" />}
                   iconPosition="left"
                 >
                   See How It Works
@@ -325,7 +325,7 @@ export default function Home() {
                       border: "1px solid rgba(255, 255, 255, 0.8)",
                     }}
                   >
-                    <span className="font-mono text-[10px] font-bold tracking-wider text-[#64748B]">
+                    <span className="font-mono text-[10px] font-bold tracking-wider text-on-surface-variant">
                       REQUEST METHOD
                     </span>
 
@@ -348,7 +348,7 @@ export default function Home() {
                   </div>
                 </InsetPanel>
 
-                <p className="text-center text-[11px] text-[#64748B]">
+                <p className="text-center text-[11px] text-on-surface-variant">
                   Illustrative request flow — not live database telemetry.
                 </p>
               </Card>
@@ -394,7 +394,7 @@ export default function Home() {
                 >
                   <div className="flex flex-col gap-4">
                     <div className="flex items-center justify-between">
-                      <span className="font-mono text-[26px] font-bold text-[#008756]">
+                      <span className="font-mono text-[26px] font-bold text-primary-strong">
                         {step.number}
                       </span>
 
@@ -430,7 +430,7 @@ export default function Home() {
                       {step.detail}
                     </span>
 
-                    <span className="font-semibold text-[#008756]">
+                    <span className="font-semibold text-primary-strong">
                       {step.kind === "success" && step.number === "03" ? (
                         <>
                           <Bolt className="mr-1 inline" size={16} />
@@ -589,7 +589,7 @@ export default function Home() {
                       <span className="text-[38px] font-bold tracking-tight text-[#0F172A]">
                         {plan.price}
                       </span>
-                      <span className="text-[12px] text-[#64748B]">
+                      <span className="text-[12px] text-on-surface-variant">
                         {plan.period}
                       </span>
                     </div>
@@ -608,7 +608,7 @@ export default function Home() {
                         key={feature}
                         className="flex items-start gap-3 text-[14px] leading-relaxed text-[#334155]"
                       >
-                        <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#DDF8EB] text-[#008756]">
+                        <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#DDF8EB] text-primary-strong">
                           <Check size={13} strokeWidth={2.5} />
                         </span>
                         {feature}
@@ -626,7 +626,7 @@ export default function Home() {
                   </Button>
 
                   {plan.highlighted && (
-                    <p className="text-center text-[11px] leading-relaxed text-[#64748B]">
+                    <p className="text-center text-[11px] leading-relaxed text-on-surface-variant">
                       Pro access is currently managed manually. Pricing
                       and availability will be announced later.
                     </p>
@@ -635,7 +635,7 @@ export default function Home() {
               ))}
             </div>
 
-            <p className="text-center text-[12px] text-[#64748B]">
+            <p className="text-center text-[12px] text-on-surface-variant">
               No payment details required to get started with Free.
             </p>
           </div>
@@ -652,7 +652,7 @@ export default function Home() {
             }}
           >
             <div className="z-10 flex max-w-xl flex-col gap-3">
-              <div className="inline-flex items-center gap-2 font-mono text-[12px] font-bold uppercase text-[#008756]">
+              <div className="inline-flex items-center gap-2 font-mono text-[12px] font-bold uppercase text-primary-strong">
                 <StatusDot />
                 SUPABASE HEARTBEAT CHECKS
               </div>

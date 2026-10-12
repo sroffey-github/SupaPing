@@ -58,7 +58,7 @@ function StatCard({
         </span>
 
         {suffix && (
-          <span className="text-xs font-medium text-[#64748B]">
+          <span className="text-xs font-medium text-on-surface-variant">
             {suffix}
           </span>
         )}

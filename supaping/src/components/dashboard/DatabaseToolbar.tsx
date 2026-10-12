@@ -18,10 +18,10 @@ export default function DatabaseToolbar({
       <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
         <div className="min-w-0">
           <h1 className="text-2xl font-bold tracking-tight text-[#172B27] sm:text-3xl">
-            Your <span className="text-[#00A86B]">Supabase</span> Databases
+            Your <span className="text-primary-strong">Supabase</span> Databases
           </h1>
 
-          <p className="mt-2 max-w-2xl text-sm leading-6 text-[#64748B] sm:text-base">
+          <p className="mt-2 max-w-2xl text-sm leading-6 text-on-surface-variant sm:text-base">
             Quietly pinging connection pools every 10 minutes so your
             free-tier instances never hibernate.
           </p>
@@ -45,7 +45,7 @@ export default function DatabaseToolbar({
         <div className="flex min-h-[50px] w-full items-center gap-3 rounded-2xl border border-white/80 bg-[#F7F8FA] px-4 shadow-[inset_3px_3px_7px_rgba(166,175,195,0.2),inset_-3px_-3px_7px_rgba(255,255,255,0.95)] transition focus-within:border-[#00A86B]/30 focus-within:ring-2 focus-within:ring-[#00A86B]/10">
           <Search
             size={19}
-            className="shrink-0 text-[#64748B]"
+            className="shrink-0 text-on-surface-variant"
             aria-hidden="true"
           />
 
@@ -56,7 +56,7 @@ export default function DatabaseToolbar({
             onChange={(event) => onSearchChange(event.target.value)}
             placeholder="Search by instance name or Supabase project URL..."
             autoComplete="off"
-            className="min-w-0 flex-1 bg-transparent py-3 text-sm text-[#1E293B] outline-none placeholder:text-[#94A3B8] sm:text-[14px]"
+            className="min-w-0 flex-1 bg-transparent py-3 text-sm text-[#1E293B] outline-none placeholder:text-text-muted sm:text-[14px]"
           />
         </div>
       </div>
