@@ -146,7 +146,7 @@ export default function Home() {
         <div className="mx-auto flex h-14 max-w-[1280px] items-center justify-between px-6">
           <a href="/" className="flex items-center gap-2.5">
             <img
-              src="/logo.png"
+              src="/logo.webp"
               alt=""
               className="h-10 w-10 shrink-0 object-contain"
             />

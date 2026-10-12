@@ -61,7 +61,7 @@ export default function SignupPage() {
       <header className="relative z-10 flex items-center justify-between px-6 py-5 sm:px-12">
         <Link href="/" className="flex items-center gap-2.5">
           <img
-            src="/logo.png"
+            src="/logo.webp"
             alt=""
             className="h-10 w-10 shrink-0 object-contain"
           />
@@ -100,7 +100,7 @@ export default function SignupPage() {
                 }}
               >
                 <img
-                  src="/logo.png"
+                  src="/logo.webp"
                   alt="SupaPing"
                   className="h-11 w-11 object-contain"
                 />

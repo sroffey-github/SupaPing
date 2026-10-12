@@ -161,7 +161,7 @@ export default function DashboardNavbar({
           className="flex min-w-0 items-center gap-2.5 justify-self-start"
         >
           <img
-            src="/logo.png"
+            src="/logo.webp"
             alt=""
             className="h-10 w-10 shrink-0 object-contain sm:h-11 sm:w-11"
           />
@@ -187,7 +187,7 @@ export default function DashboardNavbar({
             onClick={() => setMenuOpen((open) => !open)}
             aria-haspopup="menu"
             aria-expanded={menuOpen}
-            aria-label="Open account menu"
+            aria-label={`Open account menu for ${profile.name}`}
             disabled={loggingOut}
             className="flex max-w-[230px] items-center gap-2 rounded-full border border-white/80 bg-[#EEF2F6] py-1.5 pl-1.5 pr-3 shadow-[3px_3px_8px_rgba(166,175,195,0.2),-3px_-3px_8px_rgba(255,255,255,0.8)] transition hover:shadow-[inset_2px_2px_5px_rgba(166,175,195,0.18),inset_-2px_-2px_5px_rgba(255,255,255,0.8)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#00A86B] disabled:cursor-not-allowed disabled:opacity-60 sm:gap-3"
           >
