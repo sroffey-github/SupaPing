@@ -1,6 +1,5 @@
 
 import Link from "next/link";
-import FeedbackModal from "@/components/feedback/FeedbackModal";
 
 export default function SiteFooter() {
   return (
@@ -31,8 +30,6 @@ export default function SiteFooter() {
           >
             Blog
           </Link>
-
-          <FeedbackModal />
 
           <Link
             href="/terms"
