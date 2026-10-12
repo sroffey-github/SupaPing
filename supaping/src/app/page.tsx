@@ -30,7 +30,7 @@ const stats = [
   {
     value: "Built-in",
     label: "Heartbeat history",
-    color: "text-[#d97706]",
+    color: "text-[#854D0E]",
   },
 ];
 
@@ -329,7 +329,7 @@ export default function Home() {
                       REQUEST METHOD
                     </span>
 
-                    <span className="font-mono text-[12px] font-bold text-primary">
+                    <span className="font-mono text-[12px] font-bold text-primary-strong">
                       POST / REST
                     </span>
                   </div>
@@ -343,7 +343,7 @@ export default function Home() {
                       border: "1px solid rgba(255, 255, 255, 0.8)",
                     }}
                   >
-                    <Database size={15} className="text-[#d97706]" />
+                    <Database size={15} className="text-[#854D0E]" />
                     <span className="font-medium">Supabase REST API</span>
                   </div>
                 </InsetPanel>
@@ -423,7 +423,7 @@ export default function Home() {
                     <span
                       className={
                         step.kind === "query"
-                          ? "font-bold text-[#d97706]"
+                          ? "font-bold text-[#854D0E]"
                           : "truncate font-medium text-[#475569]"
                       }
                     >

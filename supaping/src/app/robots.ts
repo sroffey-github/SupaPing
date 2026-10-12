@@ -6,6 +6,6 @@ export default function robots(): MetadataRoute.Robots {
       userAgent: "*",
       allow: "/",
     },
-    sitemap: "https://supaping.app/sitemap.xml",
+    sitemap: "https://www.supaping.app/sitemap.xml",
   };
 }
