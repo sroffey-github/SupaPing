@@ -44,15 +44,17 @@ export default function BlogArticle({
     <main className="min-h-screen bg-[#EEF2F6] text-slate-900">
       <header className="border-b border-slate-200/80">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-5 sm:px-8">
-          <Link
-            href="/"
-            className="flex items-center gap-2 font-semibold tracking-tight"
-          >
-            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-md shadow-emerald-600/20">
-              S
+          <a href="/" className="flex items-center gap-2.5">
+            <img
+              src="/logo.webp"
+              alt=""
+              className="h-10 w-10 shrink-0 object-contain"
+            />
+
+            <span className="text-[17px] font-semibold tracking-tight text-[#1d1d1f]">
+              Supa<span className="text-primary-strong">Ping</span>
             </span>
-            <span className="text-lg">SupaPing</span>
-          </Link>
+          </a>
 
           <Link
             href="/"
