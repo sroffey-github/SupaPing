@@ -1,5 +1,3 @@
-@import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap");
 @import "tailwindcss";
 
 :root {
@@ -57,12 +55,20 @@
   --color-error-container: #ffebe9;
 
   /* Typography */
-  --font-sans: "Geist", -apple-system, BlinkMacSystemFont,
+  --font-sans: var(--font-geist), -apple-system, BlinkMacSystemFont,
     "SF Pro Display", sans-serif;
-  --font-mono: "JetBrains Mono", monospace;
+  --font-mono: var(--font-geist-mono), monospace;
 }
 
-html, body { margin: 0; padding: 0; min-height: 100%; background: #EEF2F6; color: #0F172A; font-family: "Geist", -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif; }
+html, body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+  background: #EEF2F6;
+  color: #0F172A;
+  font-family: var(--font-geist), -apple-system, BlinkMacSystemFont,
+    "SF Pro Display", sans-serif;
+}
 body { overscroll-behavior: none; -webkit-font-smoothing: antialiased; }
 main > :first-child { margin-top: 0 !important; }
 main > :last-child { margin-bottom: 0 !important; }
