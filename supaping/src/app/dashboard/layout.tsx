@@ -1,8 +1,10 @@
 import { Suspense } from "react";
 import { connection } from "next/server";
 import { redirect } from "next/navigation";
-import DashboardNavbar from "@/components/dashboard/DashboardNavbar";
 import { createClient } from "@/lib/supabase/server";
+
+import DashboardNavbar from "@/components/dashboard/DashboardNavbar";
+import FeedbackModal from "@/components/feedback/FeedbackModal";
 
 function DashboardFallback() {
   return (
@@ -58,7 +60,10 @@ async function DashboardRequestContent({
         email={user.email ?? undefined}
         avatarUrl={avatarUrl}
       />
+
       {children}
+
+      <FeedbackModal floating />
     </>
   );
 }

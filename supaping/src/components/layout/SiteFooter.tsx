@@ -1,5 +1,6 @@
 
 import Link from "next/link";
+import FeedbackModal from "@/components/feedback/FeedbackModal";
 
 export default function SiteFooter() {
   return (
@@ -22,7 +23,7 @@ export default function SiteFooter() {
 
         <nav
           aria-label="Site links"
-          className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-[12px]"
+          className="flex flex-wrap items-center justify-center gap-x-6 gap-y-3 text-[12px]"
         >
           <Link
             href="/blog"
@@ -30,6 +31,8 @@ export default function SiteFooter() {
           >
             Blog
           </Link>
+
+          <FeedbackModal />
 
           <Link
             href="/terms"
