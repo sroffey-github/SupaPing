@@ -21,9 +21,16 @@ export default function SiteFooter() {
         </Link>
 
         <nav
-          aria-label="Legal links"
+          aria-label="Site links"
           className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-[12px]"
         >
+          <Link
+            href="/blog"
+            className="transition-colors hover:text-primary-strong"
+          >
+            Blog
+          </Link>
+
           <Link
             href="/terms"
             className="transition-colors hover:text-primary-strong"

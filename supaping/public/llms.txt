@@ -1,0 +1,40 @@
+# SupaPing
+
+> SupaPing is a lightweight Supabase keep-alive and heartbeat monitoring
+> tool for developers managing low-traffic Supabase projects.
+
+SupaPing lets developers register a Supabase project, send heartbeat
+requests, and review request outcomes, response times, and heartbeat
+history from a dashboard.
+
+SupaPing uses a scheduled Vercel Cron Job to call an API endpoint that
+updates a dedicated keep-alive table in the user's Supabase project.
+A successful heartbeat does not guarantee that Supabase's inactivity
+pausing criteria have been satisfied.
+
+## Product
+
+- [Homepage](https://www.supaping.app/): Product overview, features,
+  pricing information, and setup overview.
+- [Dashboard](https://www.supaping.app/login): Access the SupaPing dashboard.
+
+## Supabase Guides
+
+- [Why Does Supabase Pause?](https://www.supaping.app/blog/why-does-supabase-pause):
+  Understand project inactivity, pausing, and restoration options.
+- [How to Keep a Supabase Project Active](https://www.supaping.app/blog/keep-supabase-project-active):
+  Explore scheduled activity and approaches to managing low-traffic projects.
+- [Supabase Keep-Alive With Cron Jobs](https://www.supaping.app/blog/supabase-keep-alive-cron):
+  Learn about scheduled jobs, REST API requests, and database updates.
+- [Supabase Keep-Alive Methods Compared](https://www.supaping.app/blog/supabase-keep-alive-methods):
+  Compare common keep-alive approaches and their limitations.
+
+## Official Reference
+
+- [Supabase Free Project Pausing](https://supabase.com/docs/guides/platform/free-project-pausing):
+  Consult the official documentation for current inactivity and pausing policies.
+
+## Legal
+
+- [Privacy Policy](https://www.supaping.app/privacy)
+- [Terms of Service](https://www.supaping.app/terms)

@@ -1,3 +1,4 @@
+
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
@@ -16,11 +17,55 @@ const geistMono = Geist_Mono({
   display: "swap",
 });
 
+const siteUrl = "https://www.supaping.app";
+
 export const metadata: Metadata = {
-  title: "SupaPing - Your database. Still awake.",
-  description:
-    "Keep your free-tier databases awake with lightweight, scheduled keep-alive heartbeats.",
+  metadataBase: new URL(siteUrl),
+
   applicationName: "SupaPing",
+
+  title: {
+    default: "SupaPing — Keep Your Supabase Database Active",
+    template: "%s | SupaPing",
+  },
+
+  description:
+    "Keep your Supabase project active with lightweight, scheduled database keep-alive checks. Monitor your configured projects from one simple dashboard.",
+
+  alternates: {
+    canonical: "/",
+  },
+
+  openGraph: {
+    type: "website",
+    locale: "en_GB",
+    url: "/",
+    siteName: "SupaPing",
+    title: "SupaPing — Keep Your Supabase Database Active",
+    description:
+      "Lightweight, scheduled keep-alive checks for Supabase projects, with a simple monitoring dashboard.",
+    images: [{ url: "/opengraph-image.jpg", width: 1200, height: 630, alt: "SupaPing" }],
+  },
+
+  twitter: {
+    card: "summary_large_image",
+    title: "SupaPing — Keep Your Supabase Database Active",
+    description:
+      "Lightweight, scheduled keep-alive checks for Supabase projects.",
+    images: [{ url: "/opengraph-image.jpg", width: 1200, height: 630, alt: "SupaPing" }],
+  },
+
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
 };
 
 export const viewport: Viewport = {
@@ -34,7 +79,7 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html
-      lang="en"
+      lang="en-GB"
       className={`light ${geist.variable} ${geistMono.variable}`}
     >
       <body>
